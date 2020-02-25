@@ -1,29 +1,78 @@
-Something
----------
+# Using Rhyolite with an Obelisk project
 
-## Contributing
+1. Within an already initialized Obelisk project, clone Rhyolite into
+   the dep directory, if you haven’t already:
 
-### Technology
+```bash
+git clone https://github.com/obsidiansystems/rhyolite dep/rhyolite
+```
 
-This project uses [Haskell](https://www.haskell.org/) for all parts of the application, including:
-  1. Backend server
-  2. Frontend JavaScript (Haskell compiled to JavaScript via GHCJS)
-  3. Android app
-  4. iOS app
+1. Add Rhyolite’s haskellOverrides to default.nix so that your package
+   can access them. This involves adding overrides to the arguments
+   passed to Obelisk’s project function so that it imports Rhyolite’s
+   haskellOverrides. You can base it off of this example:
 
-The server uses [PostgreSQL](https://www.postgresql.org/) for the database.
+```
+{ system ? builtins.currentSystem # TODO: Get rid of this system cruft
+, iosSdkVersion ? "10.2"
+}:
+with import ./.obelisk/impl { inherit system iosSdkVersion; };
+project ./. ({ pkgs, hackGet, ... }@args: {
 
-The development/deployment tool is [Obelisk](https://github.com/obsidiansystems/obelisk) which is heavily based on the [Nix](https://nixos.org/nix/) package manager.
+  overrides = pkgs.lib.composeExtensions (import (hackGet ./dep/rhyolite) args).haskellOverrides
+    (self: super: with pkgs.haskell.lib; {
+      # Your custom overrides go here.
+    });
 
-### Set up your machine
+  android.applicationId = "systems.obsidian.obelisk.examples.minimal";
+  android.displayName = "Obelisk Minimal Example";
+  ios.bundleIdentifier = "systems.obsidian.obelisk.examples.minimal";
+  ios.bundleName = "Obelisk Minimal Example";
+})
+```
 
-1. Use macOS or Linux.
-2. Install [Nix](https://nixos.org/nix/) and configure the [cachix](https://cachix.org/) build cache. Follow the instructions here: https://3noch.cachix.org/
-3. Install [Obelisk](https://github.com/obsidiansystems/obelisk): `nix-env -f https://github.com/obsidiansystems/obelisk/archive/master.tar.gz -iA command`
-4. Clone this reposotory and `cd` into it.
-5. Seed the database: `nix-shell -A ghc.gargoyle-postgresql-nix --run 'gargoyle-pg-run db psql < kjv-only.sql'`
-6. `ob run -v` to start up the development server. The first time it runs it will download dependencies from the cache.
+1. You can now add any of Rhyolite’s packages as dependencies to your
+   Obelisk project. Here is the full list of packages provided:
 
-`ob run` start its own [PostgreSQL](https://www.postgresql.org/) database in a directory called `db`. To reset your database, simply delete the `db` directory and reseed the database.
+   - rhyolite-aeson-orphans
+   - rhyolite-backend
+   - rhyolite-backend-db
+   - rhyolite-backend-snap
+   - rhyolite-common
+   - rhyolite-datastructures
+   - rhyolite-frontend
 
-*IMPORTANT*: `ob run` will serve a development version of the application on `http://localhost:8000` (by default) and reload whenever you save a source Haskell file. **Only Chromium-based browsers support the development server properly.**
+## Alternative method
+
+You can also let Rhyolite manage Obelisk directly. This is easier to
+setup but also means that you are stuck with the Obelisk version used
+by Rhyolite.
+
+To do this, simply overwrite the ```.obelisk/impl/github.json``` file
+with this Rhyolite thunk:
+
+```
+{
+  "owner": "obsidiansystems",
+  "repo": "rhyolite",
+  "branch": "master",
+  "rev": "06b9851a101408a86a4ec0b7df5b2f71bc532ab0",
+  "sha256": "18adbc1nnj94qhggpcxmpd5i1rz0zx93cpphl09mw4c7s65rzah7"
+}
+```
+
+# Hacking
+
+
+## On backend
+
+```bash
+nix-shell -A proj.shells.ghc --run 'cabal new-repl lib:rhyolite-backend'
+```
+
+
+## On frontend
+
+```bash
+nix-shell -A proj.shells.ghc --run 'cabal new-repl lib:rhyolite-frontend'
+```

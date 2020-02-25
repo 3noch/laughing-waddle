@@ -1,2 +1,10 @@
-optional-packages:
-  *
+packages:
+  aeson-orphans/
+  backend-db/
+  backend-snap/
+  backend/
+  common/
+  datastructures/
+  frontend/
+  logging/
+  test/

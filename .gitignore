@@ -1,9 +1,7 @@
-dist-newstyle
+dist/
+dist-newstyle/
 result
-result-android
-result-ios
-result-exe
+result-*
+*.project.local
+.ghc.*
 .attr-cache
-ghcid-output.txt
-
-db

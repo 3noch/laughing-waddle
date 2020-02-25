@@ -1,0 +1,88 @@
+name: rhyolite-backend
+version: 0.1
+license: BSD3
+copyright: Copyright (C) Obsidian Systems LLC 2018
+author: Obsidian Systems LLC
+maintainer: maintainer@obsidian.systems
+stability: Experimental
+build-type: Simple
+cabal-version: >=1.2
+description:
+  Rhyolite is a staging area of common patterns and implementations that
+  Obsidian uses, before they are tested and polished enough to go into obelisk
+  or the reflex family of packages.
+
+  This package defines some common patterns, most of them adapted to use
+  groundhog as the underlying db library.
+
+library
+  hs-source-dirs: .
+
+  build-depends:
+      aeson
+    , base
+    , blaze-html
+    , bytestring
+    , clientsession
+    , constraints
+    , constraints-extras
+    , containers
+    , data-default
+    , database-id-class
+    , database-id-groundhog
+    , dependent-sum
+    , dependent-sum-aeson-orphans
+    , exceptions
+    , groundhog
+    , groundhog-postgresql
+    , groundhog-th
+    , HaskellNet
+    , HaskellNet-SSL
+    , io-streams
+    , lens
+    , lifted-base
+    , mime-mail
+    , monad-control
+    , monad-logger
+    , monad-loops
+    , monoidal-containers
+    , mtl
+    , network
+    , parsec
+    , postgresql-simple
+    , pwstore-fast
+    , reflex
+    , resource-pool
+    , rhyolite-backend-db
+    , rhyolite-common
+    , rhyolite-datastructures
+    , rhyolite-logging
+    , semialign
+    , smtp-mail
+    , snap-core
+    , split
+    , stm
+    , template-haskell
+    , text
+    , these
+    , time
+    , transformers
+    , transformers-base
+    , vector
+    , vessel
+    , websockets
+    , websockets-snap
+    , witherable >= 0.2 && < 0.4
+
+  exposed-modules:
+    Rhyolite.Backend.Account
+    Rhyolite.Backend.App
+    Rhyolite.Backend.Email
+    Rhyolite.Backend.EmailWorker
+    Rhyolite.Backend.Listen
+    Rhyolite.Backend.Logging
+    Rhyolite.Backend.Sign
+    Rhyolite.Backend.WebSocket
+
+  other-extensions: TemplateHaskell
+  ghc-options: -Wall -fno-warn-unused-do-bind -fwarn-tabs -funbox-strict-fields -O2 -fprof-auto-calls

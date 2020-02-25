@@ -8,14 +8,14 @@
 
 # Specify additional command line arguments
 #
-# - arguments: [--color, --cpp-simple, -XQuasiQuotes]
+- arguments: [--color, --cpp-simple, -XTypeApplications, -XRecursiveDo]
 
 
 # Control which extensions/flags/modules/functions can be used
 #
 # - extensions:
+#   - name: [TypeApplications] # only these listed extensions can be used
 #   - default: false # all extension are banned by default
-#   - name: [PatternGuards, ViewPatterns] # only these listed extensions can be used
 #   - {name: CPP, within: CrossPlatform} # CPP can only be used in a given module
 #
 # - flags:
@@ -25,8 +25,9 @@
 #   - {name: [Data.Set, Data.HashSet], as: Set} # if you import Data.Set qualified, it must be as 'Set'
 #   - {name: Control.Arrow, within: []} # Certain modules are banned entirely
 #
-# - functions:
-#   - {name: unsafePerformIO, within: []} # unsafePerformIO can only appear in no modules
+- functions:
+  - {name: unsafePerformIO, within: []} # unsafePerformIO can only appear in no modules
+  - {name: undefined, within: []} # unsafePerformIO can only appear in no modules
 
 
 # Add custom hints for this project
@@ -48,8 +49,12 @@
 
 
 # Ignore some builtin hints
+- ignore: {name: Redundant do}
+- ignore: {name: Use camelCase}
+- ignore: {name: Use if}
+- ignore: {name: Use <$>}
+- ignore: {name: "Use ?~"}
 # - ignore: {name: Use const, within: SpecialModule} # Only within certain modules
-  - ignore: {name: Use camelCase}
 
 
 # Define some custom infix operators
