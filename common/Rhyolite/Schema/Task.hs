@@ -25,4 +25,4 @@ empty = Task
   }
 
 randomThing :: IO ()
-randomThing = return () >> return () >> return ()
+randomThing = return () >> return () >> return () >> return ()
