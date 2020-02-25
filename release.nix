@@ -4,7 +4,7 @@
     iosSdkVersion = "10.2";
   }
 , local-self ? import ./. self-args
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+, supportedSystems ? [ "x86_64-linux" ]
 }:
 let
   inherit (local-self) reflex-platform;
