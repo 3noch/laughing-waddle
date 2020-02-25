@@ -23,3 +23,6 @@ empty = Task
   { _task_result = Nothing
   , _task_checkedOutBy = Nothing
   }
+
+randomThing :: IO ()
+randomThing = return ()
